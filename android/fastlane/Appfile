@@ -1,0 +1,5 @@
+# Appfile for Android
+# アプリの基本情報を定義
+
+package_name("com.aimate.econa_mobile_app")
+

@@ -1,0 +1,101 @@
+name: Android Build
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: # 手動実行も可能
+
+jobs:
+  build:
+    name: Build Android App
+    runs-on: [self-hosted, linux]
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.0'
+          channel: 'stable'
+          cache: true
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'gradle'
+
+      - name: Install dependencies
+        run: |
+          flutter pub get
+          cd android
+          bundle install
+
+      - name: Run fastlane build (debug mode)
+        run: |
+          cd android
+          bundle exec fastlane build_debug
+        continue-on-error: true
+
+      - name: Run fastlane build (test mode - no signing)
+        run: |
+          cd android
+          bundle exec fastlane build_test
+
+      - name: Run fastlane build (with code signing)
+        if: ${{ secrets.KEYSTORE_FILE != '' && secrets.KEYSTORE_PASSWORD != '' }}
+        env:
+          KEYSTORE_FILE: ${{ secrets.KEYSTORE_FILE }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: |
+          cd android
+          bundle exec fastlane build
+        continue-on-error: true
+
+      - name: Run fastlane build bundle (for Google Play)
+        if: ${{ secrets.KEYSTORE_FILE != '' && secrets.KEYSTORE_PASSWORD != '' }}
+        env:
+          KEYSTORE_FILE: ${{ secrets.KEYSTORE_FILE }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: |
+          cd android
+          bundle exec fastlane build_bundle
+        continue-on-error: true
+
+      - name: Upload build artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-build
+          path: |
+            build/app/outputs/flutter-apk/
+            build/app/outputs/bundle/
+          retention-days: 7
+          if-no-files-found: ignore
+
+      - name: Build summary
+        if: always()
+        run: |
+          echo "## Build Summary" >> $GITHUB_STEP_SUMMARY
+          echo "- Status: ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Build artifacts are available in the workflow artifacts" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Available Artifacts" >> $GITHUB_STEP_SUMMARY
+          echo "- Debug APK: \`build/app/outputs/flutter-apk/app-debug.apk\`" >> $GITHUB_STEP_SUMMARY
+          echo "- Release APK: \`build/app/outputs/flutter-apk/app-release.apk\`" >> $GITHUB_STEP_SUMMARY
+          echo "- App Bundle: \`build/app/outputs/bundle/release/app-release.aab\`" >> $GITHUB_STEP_SUMMARY
+

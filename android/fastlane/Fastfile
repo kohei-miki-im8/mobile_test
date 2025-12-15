@@ -1,0 +1,77 @@
+# Fastfile for Android
+# このファイルにはfastlaneのLane定義が含まれます
+
+default_platform(:android)
+
+platform :android do
+  # ビルド前の準備
+  before_all do
+    # Flutterの依存関係を取得
+    sh("cd ../.. && flutter pub get")
+  end
+
+  # アプリをビルドするLane（デバッグ用）
+  desc "Build the Android app (debug mode)"
+  lane :build_debug do
+    # Flutterでデバッグビルド
+    sh("cd ../.. && flutter build apk --debug")
+    
+    UI.success("✅ Debug build completed successfully!")
+    UI.important("APK location: build/app/outputs/flutter-apk/app-debug.apk")
+  end
+
+  # アプリをビルドするLane（リリース用・署名なし）
+  desc "Build the Android app (release mode - no signing)"
+  lane :build_test do
+    # Flutterでリリースビルド（署名なし）
+    sh("cd ../.. && flutter build apk --release")
+    
+    UI.success("✅ Release build completed successfully! (No signing)")
+    UI.important("APK location: build/app/outputs/flutter-apk/app-release.apk")
+    UI.important("Note: This is a test build without code signing. For production, use the 'build' lane.")
+  end
+
+  # アプリをビルドするLane（リリース用・署名あり）
+  desc "Build the Android app (release mode - with signing)"
+  lane :build do
+    # Flutterでリリースビルド（署名あり）
+    # key.propertiesファイルが必要
+    sh("cd ../.. && flutter build apk --release")
+    
+    UI.success("✅ Release build completed successfully!")
+    UI.important("APK location: build/app/outputs/flutter-apk/app-release.apk")
+  end
+
+  # App BundleをビルドするLane（Google Play用）
+  desc "Build the Android App Bundle (for Google Play)"
+  lane :build_bundle do
+    # FlutterでApp Bundleをビルド
+    sh("cd ../.. && flutter build appbundle --release")
+    
+    UI.success("✅ App Bundle build completed successfully!")
+    UI.important("AAB location: build/app/outputs/bundle/release/app-release.aab")
+  end
+
+  # テストを実行するLane
+  desc "Run tests"
+  lane :test do
+    # Flutterのテストを実行
+    sh("cd ../.. && flutter test")
+    
+    UI.success("✅ Tests completed successfully!")
+  end
+
+  # ビルドとテストの両方を実行
+  desc "Build and test"
+  lane :build_and_test do
+    test
+    build_test
+  end
+
+  # エラー発生時の処理
+  error do |lane, exception|
+    UI.error("❌ Error in lane #{lane}: #{exception.message}")
+    UI.error(exception.backtrace.join("\n"))
+  end
+end
+
