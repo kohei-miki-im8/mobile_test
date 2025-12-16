@@ -1,0 +1,4 @@
+version: v2
+name: buf.build/ai-mate-inc/econa-site
+deps:
+  - buf.build/protocolbuffers/wellknowntypes

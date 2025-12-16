@@ -1,0 +1,94 @@
+# Dartファイル構造ルール
+
+## 概要
+Dartファイルでは、クラスを最初に配置し、ヘルパー関数を後ろに配置するのが一般的なパターンです。
+
+## ファイル構造の順序
+
+### 1. import文
+```dart
+import 'package:flutter/material.dart';
+import 'package:my_app/components/my_widget.dart';
+```
+
+### 2. メインクラス
+```dart
+class MyPage extends StatelessWidget {
+  const MyPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      // ウィジェットの実装
+    );
+  }
+}
+```
+
+### 3. ヘルパー関数（ファイルの最後）
+```dart
+/// ヘルパー関数の例
+bool _isValidInput(String input) {
+  return input.isNotEmpty;
+}
+
+/// ユーティリティ関数の例
+void _showErrorBanner(BuildContext context, String message) {
+  // エラーバナー表示の実装
+}
+```
+
+## 配置の理由
+
+1. **可読性の向上**: メインのクラスが最初に来ることで、ファイルの目的が明確
+2. **Dartの慣習**: クラスを最初に配置し、ヘルパー関数を後ろに配置するのが一般的
+3. **保守性**: クラスとヘルパー関数が分離されているため、修正が容易
+4. **コードの流れ**: 重要な部分（クラス）から読み始め、詳細な実装（ヘルパー関数）に進む自然な流れ
+
+## 適用例
+
+### 良い例
+```dart
+// 1. import文
+import 'package:flutter/material.dart';
+
+// 2. メインクラス
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: _buildBody(context),
+    );
+  }
+}
+
+// 3. ヘルパー関数（ファイルの最後）
+Widget _buildBody(BuildContext context) {
+  return Container();
+}
+```
+
+### 避けるべき例
+```dart
+// ヘルパー関数がクラスの前に来ている
+bool _isValidInput(String input) {
+  return input.isNotEmpty;
+}
+
+class HomePage extends StatelessWidget {
+  // クラスが後ろに来ている
+}
+```
+
+## 注意事項
+
+- ヘルパー関数は`_`（アンダースコア）で始めることで、プライベート関数であることを明示
+- 関数には適切なドキュメントコメントを付ける
+- 関連する機能ごとに関数をグループ化する
+- ファイルが長くなる場合は、別ファイルに分離を検討する
+description:
+globs:
+alwaysApply: true
+---

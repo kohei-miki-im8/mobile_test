@@ -1,0 +1,56 @@
+---
+description: 名前付きパラメータの順序に関するルール。必須パラメータはオプショナルパラメータの前に配置し、コードの一貫性と可読性を向上させる必要があります。
+globs: ["**/*.dart"]
+alwaysApply: true
+---
+# 名前付きパラメータの順序に関するルール
+
+Dartでは、名前付きパラメータを使用する際に特定の順序を守ることが推奨されています。特に、必須パラメータ（`required`キーワードを持つもの）はオプショナルパラメータの前に配置すべきです。
+
+## パラメータ順序のガイドライン
+
+1. **必須パラメータを先に記述**: すべての`required`キーワードを持つパラメータは、オプショナルパラメータよりも前に記述する
+2. **順序の一貫性**: コードベース全体で一貫したパラメータ順序を維持する
+3. **可読性の向上**: 適切なパラメータ順序によりコードの可読性が向上する
+
+## 適用例
+
+```dart
+// 推奨されない書き方
+class MyWidget extends StatelessWidget {
+  const MyWidget({
+    super.key,
+    required this.title,  // requiredパラメータが後に来ている
+  });
+
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(title);
+  }
+}
+
+// 推奨される書き方
+class MyWidget extends StatelessWidget {
+  const MyWidget({
+    required this.title,  // requiredパラメータが先に来ている
+    super.key,
+  });
+
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(title);
+  }
+}
+```
+
+## 理由
+
+1. **言語の慣習**: Dartの慣習として必須パラメータが先に来ることが一般的
+2. **エラー防止**: パラメータの欠落が早期に検出される
+3. **API設計**: 適切なパラメータ順序はAPIの使いやすさを向上させる
+
+この順序に従うことで、コードの一貫性が保たれ、他の開発者が理解しやすいコードになります。

@@ -1,0 +1,37 @@
+# 未使用のimport削除ルール
+
+## 概要
+コードの品質と保守性を向上させるために、未使用のimport文を削除することを推奨します。
+
+## ルール
+
+### 1. 未使用importの削除
+- コード内で実際に使用されていないimport文は削除してください
+- 例：`import 'package:logger/logger.dart';`が使用されていない場合は削除
+
+### 2. 削除すべきimportの例
+```dart
+// ❌ 削除すべき例（使用されていない）
+import 'package:logger/logger.dart';
+
+// ✅ 良い例（実際に使用されている）
+import 'package:flutter/material.dart';
+```
+
+### 3. 確認方法
+- IDEのlint警告を確認する
+- 使用されていないimportは通常、警告として表示される
+- 例：「Unused import: 'package:logger/logger.dart'. Try removing the import directive.」
+
+## メリット
+- コードの可読性向上
+- ビルド時間の短縮
+- 依存関係の明確化
+- メンテナンス性の向上
+
+## 適用例
+[karute_love_advice_page.dart](mdc:lib/presentations/pages/karute/karute_love_advice_page.dart)の19行目の`import 'package:logger/logger.dart';`は使用されていないため削除すべきです。
+description:
+globs:
+alwaysApply: false
+---

@@ -1,0 +1,117 @@
+---
+description: ファイル内でのみ使用するヘルパー関数の定義に関するルール。クラス外かつファイルの一番下にアンダースコア付きの名前で定義する必要があります。
+globs: ["**/*.dart"]
+alwaysApply: true
+---
+# ヘルパー関数の配置ルール
+
+## 概要
+ファイル内でのみ使用するヘルパー関数は、クラス外かつファイルの一番下にアンダースコア付きの名前で定義する必要があります。
+
+## ルール
+
+### 1. クラス外に定義
+- ヘルパー関数はクラスの外（トップレベル）に定義すること
+- クラス内の静的メソッドとして定義しないこと
+
+### 2. ファイルの一番下に配置
+- ヘルパー関数はファイルの最後（すべてのクラス定義の後）に配置すること
+- インポート文やクラス定義の前に配置しないこと
+
+### 3. アンダースコア付きの名前
+- ファイル内でのみ使用する関数は、アンダースコア（`_`）で始まる名前を付けること
+- これにより、ファイル外からアクセスできないプライベート関数となる
+
+## 実装例
+
+### ✅ 良い例
+
+```dart
+import 'package:flutter/material.dart';
+
+class MyPage extends StatelessWidget {
+  const MyPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final result = _calculateResult(10, 20);
+    return Text('Result: $result');
+  }
+}
+
+/// 結果を計算するヘルパー関数
+int _calculateResult(int a, int b) {
+  return a + b;
+}
+```
+
+### ❌ 悪い例
+
+```dart
+import 'package:flutter/material.dart';
+
+/// 結果を計算するヘルパー関数（ファイルの上に配置されている）
+int _calculateResult(int a, int b) {
+  return a + b;
+}
+
+class MyPage extends StatelessWidget {
+  const MyPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final result = _calculateResult(10, 20);
+    return Text('Result: $result');
+  }
+}
+```
+
+```dart
+import 'package:flutter/material.dart';
+
+class MyPage extends StatelessWidget {
+  const MyPage({super.key});
+
+  /// クラス内の静的メソッドとして定義されている
+  static int _calculateResult(int a, int b) {
+    return a + b;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final result = _calculateResult(10, 20);
+    return Text('Result: $result');
+  }
+}
+```
+
+```dart
+import 'package:flutter/material.dart';
+
+class MyPage extends StatelessWidget {
+  const MyPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final result = calculateResult(10, 20); // アンダースコアがない
+    return Text('Result: $result');
+  }
+}
+
+/// アンダースコアがない（パブリック関数）
+int calculateResult(int a, int b) {
+  return a + b;
+}
+```
+
+## 理由
+
+1. **可読性の向上**: ファイルの構造が明確になり、メインのクラス定義が先に来ることで読みやすくなる
+2. **スコープの明確化**: アンダースコア付きの名前により、ファイル内でのみ使用されることが明確になる
+3. **保守性の向上**: ヘルパー関数がファイルの最後にまとまることで、メンテナンスが容易になる
+4. **一貫性の維持**: プロジェクト全体で統一されたコーディングスタイルを維持できる
+
+## 例外
+
+- 複数のファイルで使用される関数は、別のユーティリティファイルに定義すること
+- パブリックAPIとして公開する関数は、アンダースコアなしで定義すること

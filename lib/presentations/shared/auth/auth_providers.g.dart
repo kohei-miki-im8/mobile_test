@@ -1,0 +1,31 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'auth_providers.dart';
+
+// **************************************************************************
+// RiverpodGenerator
+// **************************************************************************
+
+String _$currentUserIdHash() => r'cc12afaa6bd003e457cf721bc36991276345303a';
+
+/// 現在のユーザーIDを提供するProvider
+///
+/// キャッシュを確認し、なければAPIから取得してキャッシュする。
+///
+/// Copied from [currentUserId].
+@ProviderFor(currentUserId)
+final currentUserIdProvider = FutureProvider<String>.internal(
+  currentUserId,
+  name: r'currentUserIdProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$currentUserIdHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef CurrentUserIdRef = FutureProviderRef<String>;
+// ignore_for_file: type=lint
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

@@ -1,0 +1,109 @@
+# Unnecessary Lambdas (Tearoff) Rule
+
+## 概要
+Dartでは、単純な関数呼び出しをラムダ式で包むのではなく、tearoff（関数の参照）を使用することが推奨されています。これにより、コードがより簡潔になり、パフォーマンスも向上します。
+
+## ルール
+
+### 1. 基本的なtearoffの使用
+```dart
+// ❌ 非推奨 - 不要なラムダ式
+final list = [1, 2, 3, 4];
+final evenNumbers = list.where((number) => number.isEven);
+
+// ✅ 推奨 - tearoffを使用
+final list = [1, 2, 3, 4];
+final evenNumbers = list.where(int.isEven);
+```
+
+### 2. メソッド呼び出しのtearoff
+```dart
+// ❌ 非推奨
+final strings = ['hello', 'world'];
+final upperCaseStrings = strings.map((str) => str.toUpperCase());
+
+// ✅ 推奨
+final strings = ['hello', 'world'];
+final upperCaseStrings = strings.map(String.toUpperCase);
+```
+
+### 3. コンストラクタのtearoff
+```dart
+// ❌ 非推奨
+final numbers = ['1', '2', '3'];
+final intList = numbers.map((str) => int.parse(str));
+
+// ✅ 推奨
+final numbers = ['1', '2', '3'];
+final intList = numbers.map(int.parse);
+```
+
+### 4. 静的メソッドのtearoff
+```dart
+// ❌ 非推奨
+final numbers = [1, 2, 3];
+final stringList = numbers.map((num) => num.toString());
+
+// ✅ 推奨
+final numbers = [1, 2, 3];
+final stringList = numbers.map(toString);
+```
+
+## 適用できない場合
+
+### 1. パラメータが必要な場合
+```dart
+// これは正しい - パラメータが必要
+final numbers = [1, 2, 3];
+final doubled = numbers.map((num) => num * 2);
+```
+
+### 2. 複数の操作を行う場合
+```dart
+// これは正しい - 複数の操作
+final numbers = [1, 2, 3];
+final processed = numbers.map((num) {
+  final doubled = num * 2;
+  return doubled.toString();
+});
+```
+
+### 3. 条件分岐がある場合
+```dart
+// これは正しい - 条件分岐
+final numbers = [1, 2, 3, 4];
+final filtered = numbers.where((num) => num > 2);
+```
+
+## よくある変換例
+
+| 非推奨 | 推奨 |
+|--------|------|
+| `(str) => str.toUpperCase()` | `String.toUpperCase` |
+| `(num) => num.isEven` | `int.isEven` |
+| `(str) => int.parse(str)` | `int.parse` |
+| `(num) => num.toString()` | `toString` |
+| `(str) => str.length` | `String.length` |
+
+## メリット
+
+1. **コードの簡潔性**: 不要なラムダ式を削除することでコードが読みやすくなる
+2. **パフォーマンス**: tearoffはコンパイル時に最適化される
+3. **一貫性**: コードベース全体で統一されたスタイル
+4. **保守性**: より少ないコードで同じ機能を実現
+
+## 自動修正
+
+このルールに従わないコードは、以下のコマンドで自動修正できます：
+```bash
+dart fix --apply
+```
+
+## 注意点
+
+- tearoffは単純な関数呼び出しにのみ適用可能
+- パラメータの変換や複雑な処理には従来のラムダ式を使用
+- コードの可読性を最優先に考慮する
+---
+alwaysApply: true
+---

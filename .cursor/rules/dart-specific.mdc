@@ -1,0 +1,161 @@
+# Dart言語開発ガイドライン
+
+## コードスタイル
+- 2スペースインデントを使用
+- セミコロンは必須
+- 行の最大長は80文字
+- クラス名はPascalCase
+- 変数名とメソッド名はcamelCase
+- 定数名はSCREAMING_SNAKE_CASE
+
+## 命名規則
+```dart
+// クラス名
+class UserProfile extends StatelessWidget {}
+
+// 変数名
+String userName = 'John';
+int maxCount = 10;
+
+// メソッド名
+void getUserData() {}
+bool isValidInput() {}
+
+// 定数名
+const String API_BASE_URL = 'https://api.example.com';
+const int MAX_RETRY_COUNT = 3;
+```
+
+## Null Safety
+- 常にnull safetyを使用
+- 可能な限りnon-nullable型を使用
+- lateキーワードは必要な場合のみ使用
+
+```dart
+// 良い例
+String name = 'John';
+String? optionalName;
+
+// 避けるべき例
+String name = null; // コンパイルエラー
+```
+
+## エラーハンドリング
+```dart
+// try-catch文を使用
+try {
+  final result = await apiCall();
+  return result;
+} catch (e) {
+  print('エラーが発生しました: $e');
+  rethrow;
+}
+
+// Futureのエラーハンドリング
+Future<void> handleAsyncOperation() async {
+  try {
+    await someAsyncOperation();
+  } on NetworkException catch (e) {
+    // ネットワークエラーの処理
+  } on ValidationException catch (e) {
+    // バリデーションエラーの処理
+  } catch (e) {
+    // その他のエラー
+  }
+}
+```
+
+## コメント
+```dart
+/// ドキュメンテーションコメント（///）を使用
+/// ユーザープロフィールを取得します
+///
+/// [userId] ユーザーID
+/// [includePrivateData] プライベートデータを含めるかどうか
+///
+/// 戻り値: ユーザープロフィール情報
+Future<UserProfile> getUserProfile(String userId, {bool includePrivateData = false}) async {
+  // 実装
+}
+
+// インラインコメント（//）は必要最小限に
+final result = await apiCall(); // API呼び出し
+```
+
+## ファイル構造
+- 1つのファイルに1つのクラス
+- ファイル名はsnake_case
+- ディレクトリ名もsnake_case
+
+```dart
+// user_profile.dart
+class UserProfile extends StatelessWidget {
+  // 実装
+}
+
+// user_repository.dart
+class UserRepository {
+  // 実装
+}
+```
+
+## インポート順序
+1. dart: ライブラリ
+2. package: ライブラリ
+3. 相対インポート
+
+```dart
+import 'dart:async';
+import 'dart:io';
+
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../models/user.dart';
+import '../services/api_service.dart';
+```
+
+## 型注釈
+- 可能な限り型注釈を明示的に記述
+- 特にpublic APIでは必須
+
+```dart
+// 良い例
+String userName = 'John';
+List<String> userNames = ['John', 'Jane'];
+Map<String, dynamic> userData = {'name': 'John'};
+
+// 避けるべき例
+var userName = 'John'; // 型が明確でない場合
+```
+
+## 定数
+```dart
+// constを使用してコンパイル時定数を作成
+const double defaultPadding = 16.0;
+const Duration animationDuration = Duration(milliseconds: 300);
+
+// finalを使用して実行時定数を作成
+final String apiUrl = Platform.environment['API_URL'] ?? 'https://api.example.com';
+```
+
+## 非同期処理
+```dart
+// async/awaitを使用
+Future<String> fetchData() async {
+  final response = await http.get(Uri.parse('https://api.example.com/data'));
+  return response.body;
+}
+
+// Futureの連鎖
+Future<String> processData() async {
+  return await fetchData()
+      .then((data) => processData(data))
+      .catchError((error) => handleError(error));
+}
+```
+---
+description: Dart言語の開発ガイドライン。コードスタイル、命名規則、null safety、エラーハンドリングなどのベストプラクティスを定義します。
+globs: ["**/*.dart"]
+alwaysApply: true
+---

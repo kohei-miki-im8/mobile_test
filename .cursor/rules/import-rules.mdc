@@ -1,0 +1,35 @@
+---
+description: Dartのインポート文に関するルール。常にpackage importを使用し、相対インポートを避ける必要があります。
+globs: ["**/*.dart"]
+alwaysApply: true
+---
+# Import Rules
+
+## Package Import Usage
+
+このプロジェクトでは、以下の理由により、常にpackage importを使用することを推奨します：
+
+1. コードの可読性と保守性の向上
+2. 循環参照の防止
+3. 依存関係の明確化
+4. ビルド時の最適化
+
+### 推奨される使用方法
+
+```dart
+// 良い例
+import 'package:my_app/screens/home_screen.dart';
+import 'package:my_app/widgets/custom_button.dart';
+
+// 避けるべき例
+import '../screens/home_screen.dart';
+import '../../widgets/custom_button.dart';
+```
+
+### 注意事項
+
+- 新しいファイルを作成する際は、必ずpackage importを使用してください
+- 既存のコードを修正する際は、可能な限りpackage importに変更してください
+- インポートパスは、プロジェクトのルートディレクトリからの相対パスで指定してください
+
+

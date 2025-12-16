@@ -1,0 +1,45 @@
+---
+description: Flutter/Dart Linter Fixes。linterエラーを防ぐための実装・修正ルール。import文の順序、コンストラクタの配置、パラメータの順序などを定義します。
+globs: ["**/*.dart"]
+alwaysApply: true
+---
+# Flutter/Dart Linter Fixes
+
+このプロジェクトでは、以下のlinterエラーが発生しないように実装・修正を行うこと：
+
+1. **Sort directive sections alphabetically.**
+   - import文やライブラリ宣言はアルファベット順に並べること。
+   - 例：dart: → package: → 自作パッケージの順。
+
+2. **Constructor declarations should be before non-constructor declarations.**
+   - クラス内ではコンストラクタを他のメンバ（メソッドやgetter/setter等）より前に記述すること。
+
+3. **Parameter 'key' could be a super parameter.**
+   - Flutterのウィジェットでkeyを受け取る場合、`super.key`の形でスーパーパラメータとして渡すこと。
+   - 例：`const MyWidget({super.key, ...})`
+
+4. **Required named parameters should be before optional named parameters.**
+   - requiredなnamed parameterは、optionalなnamed parameterより前に記述すること。
+   - 例：`MyWidget({required this.text, this.color})`
+
+5. **Missing a required trailing comma.**
+   - 複数行の引数リストやコレクションリテラルの末尾にはカンマを付けること。
+   - 例：
+     ```dart
+     Widget build(BuildContext context) {
+       return Column(
+         children: [
+           Text('A'),
+           Text('B'),
+         ],
+       );
+     }
+     ```
+
+6. **'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss.**
+   - Colorの透明度変更には`withOpacity`ではなく`withAlpha`や`withValues`を使うこと。
+   - 例：`color.withAlpha((opacity * 255).round())` または `color.withValues(alpha: (opacity * 255).round())`
+
+---
+
+これらのルールは[lib/presentations/components](mdc:lib/presentations/components)配下の全ウィジェット実装に必ず適用すること。

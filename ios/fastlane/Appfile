@@ -1,0 +1,7 @@
+# Appfile for iOS
+# アプリの基本情報を定義
+
+app_identifier("jp.co.ai-mate.lavi")
+apple_id(ENV["APPLE_ID"]) # GitHub Secretsから取得
+team_id(ENV["APPLE_TEAM_ID"]) # GitHub Secretsから取得
+

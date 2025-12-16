@@ -1,0 +1,18 @@
+version: v2
+plugins:
+  - remote: buf.build/protocolbuffers/dart:v21.1.2
+    out: lib/domains/repositories/gen
+    include_imports: true
+    opt:
+      - grpc
+  - remote: buf.build/connectrpc/dart
+    out: lib/domains/repositories/gen
+    include_imports: true
+inputs:
+  - module: buf.build/ai-mate-inc/econa-site
+    exclude_paths:
+      - econa/services/admin
+      - econa/services/engine
+  - module: buf.build/protocolbuffers/wellknowntypes
+    paths:
+      - google/protobuf

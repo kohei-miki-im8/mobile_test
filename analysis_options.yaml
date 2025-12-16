@@ -1,0 +1,13 @@
+include: package:very_good_analysis/analysis_options.yaml
+
+analyzer:
+  plugins:
+    - custom_lint
+
+linter:
+  rules:
+    public_member_api_docs: false
+    sort_pub_dependencies: false
+    omit_local_variable_types: false
+    avoid_redundant_argument_values: false
+    use_setters_to_change_properties: false

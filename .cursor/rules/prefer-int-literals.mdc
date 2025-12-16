@@ -1,0 +1,29 @@
+---
+description: intリテラル推奨ルール。整数値を表す場合はdoubleリテラルを避け、intリテラルを使用して型安全性と可読性を高める必要があります。
+globs: ["**/*.dart"]
+alwaysApply: true
+---
+# intリテラル推奨ルール
+
+## 概要
+Dartでは、整数値を表す場合に double リテラル（例: 2.0）の使用は避け、int リテラル（例: 2）を使用することが推奨されます。
+これは、prefer_int_literals lintルールに準拠し、型安全性と可読性を高めるためです。
+
+## ルール
+- 整数値を指定する場合は、必ず int リテラル（例: 2）を使用すること。
+- double 型が明示的に必要な場合のみ 2.0 のような double リテラルを使用する。
+- height: 2.0 のような記述は、height: 2 へ修正する（height プロパティが double を要求しない限り）。
+
+## 適用例
+```dart
+// ❌ 悪い例
+height: 2.0,
+count: 3.0,
+
+// ✅ 良い例
+height: 2,
+count: 3,
+```
+
+## 参考
+- [Dart Lint prefer_int_literals](https://dart-lang.github.io/linter/lints/prefer_int_literals.html)

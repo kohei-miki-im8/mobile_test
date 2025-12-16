@@ -1,0 +1,176 @@
+# Flutter開発ガイドライン
+
+## プロジェクト構造
+- メインエントリーポイント: [lib/main.dart](mdc:lib/main.dart)
+- アプリケーション設定: [lib/config/app_config.dart](mdc:lib/config/app_config.dart)
+- プロジェクトドキュメント: [README.md](mdc:README.md)
+
+## ウィジェット実装ガイドライン
+- 関数としてウィジェットを返す実装は避け、必ず`StatelessWidget`または`StatefulWidget`を継承したクラスとして実装すること
+- 以下のような実装は避けること：
+```dart
+Widget buildMyWidget() {
+  return Container(
+    child: Text('Hello'),
+  );
+}
+```
+- 代わりに以下のように実装すること：
+```dart
+class MyWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Text('Hello'),
+    );
+  }
+}
+```
+
+## Import Rules
+このプロジェクトでは、常にpackage importを使用することを推奨します：
+```dart
+// 良い例
+import 'package:econa_mobile_app/screens/home_screen.dart';
+import 'package:econa_mobile_app/widgets/custom_button.dart';
+
+// 避けるべき例
+import '../screens/home_screen.dart';
+import '../../widgets/custom_button.dart';
+```
+
+## Windows PowerShell用ターミナルコマンド
+
+### Flutter開発コマンド
+```powershell
+# Flutterプロジェクトの依存関係を取得
+flutter pub get
+
+# Flutterアプリを実行（デバッグモード）
+flutter run
+
+# Flutterアプリを実行（リリースモード）
+flutter run --release
+
+# Flutterアプリをビルド（Android APK）
+flutter build apk
+
+# Flutterアプリをビルド（Android App Bundle）
+flutter build appbundle
+
+# Flutterアプリをビルド（iOS）
+flutter build ios
+
+# Flutterアプリをクリーンビルド
+flutter clean
+flutter pub get
+
+# Flutterアプリのテストを実行
+flutter test
+
+# Flutterアプリの分析を実行
+flutter analyze
+
+# Flutterアプリのフォーマットを実行
+flutter format .
+
+# Flutterアプリのドクターを実行
+flutter doctor
+```
+
+### 開発環境セットアップ
+```powershell
+# Flutterのバージョンを確認
+flutter --version
+
+# Flutterの環境を診断
+flutter doctor -v
+
+# 利用可能なデバイスを確認
+flutter devices
+
+# エミュレーターを起動（Android）
+flutter emulators --launch <emulator_id>
+
+# エミュレーターを起動（iOS）
+open -a Simulator
+```
+
+### パッケージ管理
+```powershell
+# 新しいパッケージを追加
+flutter pub add <package_name>
+
+# 開発依存関係としてパッケージを追加
+flutter pub add --dev <package_name>
+
+# パッケージを削除
+flutter pub remove <package_name>
+
+# パッケージの依存関係を更新
+flutter pub upgrade
+
+# パッケージの依存関係を確認
+flutter pub deps
+```
+
+### コード生成
+```powershell
+# Freezedコードを生成
+flutter packages pub run build_runner build
+
+# Freezedコードを監視モードで生成
+flutter packages pub run build_runner watch
+
+# 生成されたファイルをクリーンアップ
+flutter packages pub run build_runner clean
+```
+
+### Git操作
+```powershell
+# 現在のブランチを確認
+git branch
+
+# 新しいブランチを作成
+git checkout -b <branch_name>
+
+# ブランチを切り替え
+git checkout <branch_name>
+
+# 変更をステージング
+git add .
+
+# コミット
+git commit -m "コミットメッセージ"
+
+# プッシュ
+git push origin <branch_name>
+
+# プル
+git pull origin <branch_name>
+```
+
+### デバッグ・ログ
+```powershell
+# Flutterアプリのログを確認
+flutter logs
+
+# 特定のデバイスのログを確認
+flutter logs -d <device_id>
+
+# アプリのパフォーマンスを分析
+flutter run --profile
+```
+
+## 重要なディレクトリ
+- [lib/](mdc:lib) - メインのソースコードディレクトリ
+- [assets/](mdc:assets) - 画像、フォント、その他のリソース
+- [android/](mdc:android) - Android固有の設定
+- [ios/](mdc:ios) - iOS固有の設定
+
+## 参考ドキュメント
+- [Flutter公式ドキュメント](https://docs.flutter.dev)
+description:
+globs:
+alwaysApply: false
+---

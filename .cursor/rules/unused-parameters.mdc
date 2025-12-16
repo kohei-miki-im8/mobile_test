@@ -1,0 +1,45 @@
+---
+description: 未使用のオプショナルパラメータに関するルール。コードの明確さと保守性を高めるために、未使用のパラメータを削除する必要があります。
+globs: ["**/*.dart"]
+alwaysApply: true
+---
+# 未使用のオプショナルパラメータに関するルール
+
+Flutterでは、コードの明確さと保守性を高めるために、未使用のオプショナルパラメータを削除することが推奨されています。
+
+## 未使用パラメータを削除する理由
+
+1. **コードの簡潔さ**: 使用されていないパラメータを削除することで、コードがより読みやすくなります
+2. **メンテナンス性の向上**: 将来的なコードの変更時に混乱を避けることができます
+3. **意図の明確化**: 実際に使用されるパラメータのみを定義することで、クラスやメソッドの意図が明確になります
+
+## 適用例
+
+```dart
+// 推奨されない書き方
+class MyWidget extends StatelessWidget {
+  const MyWidget({
+    super.key,  // keyパラメータが使われていない
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+
+// 推奨される書き方
+class MyWidget extends StatelessWidget {
+  const MyWidget(); // 未使用のkeyパラメータを削除
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+```
+
+## 例外
+
+- Widgetクラスを継承する場合でも、実際にkeyを使用しない場合は省略しても問題ありません
+- ただし、リストの中でWidgetを使用する場合や、Widgetの識別が必要な場合は、keyパラメータを保持すべきです

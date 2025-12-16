@@ -1,0 +1,72 @@
+---
+alwaysApply: true
+description: build_runnerの効率化に関するルール
+---
+
+# Build Runner最適化ルール
+
+## 概要
+build_runnerを実行する際は、変更したファイルのみを対象として実行し、ビルド時間を短縮する。
+
+## ルール
+
+### 1. build-filterオプションの使用
+build_runnerを実行する際は、必ず`--build-filter`オプションを使用して、変更したファイルのみを対象とする。
+
+**重要**: `--build-filter`で指定するのは、生成されるファイル（`*.freezed.dart`、`*.g.dart`など）のパスです。
+
+```bash
+# 良い例 - 生成されるファイルを指定
+dart run build_runner build --build-filter="lib/domains/entities/profile.freezed.dart"
+
+# 良い例 - 複数の生成ファイルを対象
+dart run build_runner build --build-filter="lib/domains/entities/*.freezed.dart"
+
+# 避けるべき例 - 全体を対象
+dart run build_runner build
+```
+
+### 2. 対象ファイルの選択基準
+以下のファイルを変更した場合は、対応する生成ファイルを指定する：
+
+- **エンティティファイル**: `lib/domains/entities/*.dart` → `lib/domains/entities/*.freezed.dart`
+- **Stateファイル**: `lib/presentations/pages/*/*_state.dart` → `lib/presentations/pages/*/*_state.freezed.dart`
+- **ViewModelファイル**: `lib/presentations/pages/*/*_view_model.dart` → `lib/presentations/pages/*/*_view_model.g.dart`
+
+### 3. 実行例
+
+```bash
+# Profileエンティティを変更した場合
+dart run build_runner build --build-filter="lib/domains/entities/profile.freezed.dart"
+
+# 複数のエンティティを変更した場合
+dart run build_runner build --build-filter="lib/domains/entities/*.freezed.dart"
+
+# Stateファイルを変更した場合
+dart run build_runner build --build-filter="lib/presentations/pages/home/home_page_state.freezed.dart"
+```
+
+### 4. 緊急時の例外
+以下の場合は`--build-filter`なしで実行しても良い：
+- 初回セットアップ時
+- 大量のファイルを変更した場合
+- 依存関係の問題が発生した場合
+
+```bash
+# 緊急時のみ
+dart run build_runner build --delete-conflicting-outputs
+```
+
+## メリット
+
+1. **時間短縮**: 不要なファイルの再生成を避けることで、ビルド時間を大幅に短縮
+2. **効率性**: 開発サイクルが高速化される
+3. **リソース節約**: CPUとメモリの使用量を削減
+4. **開発体験**: 待機時間の短縮により、開発効率が向上
+
+## 注意事項
+
+- `--build-filter`で指定するのは生成されるファイル（`*.freezed.dart`、`*.g.dart`など）のパスです
+- 生成ファイルがまだ存在しない場合は、元のファイル名から生成ファイル名を推測して指定します（例：`profile.dart` → `profile.freezed.dart`）
+- 依存関係のあるファイルを変更した場合は、関連する生成ファイルも含める必要があります
+- 初回実行時や大きな変更の後は、全体ビルドを実行することを推奨

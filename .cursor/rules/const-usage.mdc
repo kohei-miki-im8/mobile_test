@@ -1,0 +1,47 @@
+---
+description: Dartのconst使用に関するルール。パフォーマンスと保守性を向上させるために、適切なタイミングでconstを使用する必要があります。
+globs: ["**/*.dart"]
+alwaysApply: true
+---
+# const使用ルール
+
+## 概要
+このルールは、パフォーマンスと保守性を向上させるために、コードベースで`const`を使用するタイミングと方法を定義します。
+
+## ルール
+
+1. **ウィジェットコンストラクタ**
+   - すべてのパラメータがコンパイル時定数の場合、ウィジェットコンストラクタで`const`を使用する
+   - 例: `const SizedBox(width: 16, height: 16)`
+
+2. **静的値**
+   - 実行時に変更されない静的値には`const`を使用する
+   - 例: `const double defaultPadding = 16.0`
+
+3. **リストとマップ**
+   - 静的なリストとマップには`const`を使用する
+   - 例: `const List<String> supportedLocales = ['en', 'ja']`
+
+4. **constを使用しない場合:**
+   - 値が実行時の値に依存する場合
+   - 値が変更可能である必要がある場合
+   - 値が動的に計算される場合
+
+## 例
+
+```dart
+// 良い例
+const double defaultPadding = 16.0;
+const List<String> supportedLocales = ['en', 'ja'];
+const TextStyle titleStyle = TextStyle(fontSize: 20);
+
+// 悪い例
+final double defaultPadding = 16.0;  // constを使用すべき
+List<String> supportedLocales = ['en', 'ja'];  // constを使用すべき
+```
+
+## メリット
+- コンパイル時の最適化によるパフォーマンスの向上
+- コードの保守性の向上
+- コードの意図の明確化
+- メモリ使用量の削減

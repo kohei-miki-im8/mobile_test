@@ -1,0 +1,80 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.build/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+migrate_working_dir/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# The .vscode folder contains launch configuration and tasks you configure in
+# VS Code which you may wish to be included in version control, so this line
+# is commented out by default.
+#.vscode/
+
+# Flutter/Dart/Pub related
+**/doc/api/
+**/ios/Flutter/.last_build_id
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+/build/
+
+# Symbolication related
+app.*.symbols
+
+# Obfuscation related
+app.*.map.json
+
+# Android Studio will place build artifacts here
+/android/app/debug
+/android/app/profile
+/android/app/release
+
+.env*
+env.g*
+firebase.json
+/lib/firebase_options.dart
+android/app/google-services.json
+/# Consolidated ignore for generated econa protobuf/clients
+/lib/domains/repositories/gen/**
+/config/app_config_dev.json
+devtools_options.yaml
+.vscode/launch.json222
+
+ios/build/
+
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/**/*.png
+fastlane/test_output
+*.ipa
+*.dSYM.zip
+*.app.dSYM
+
+# Ruby dependencies
+vendor/
+
+# Certificates and provisioning profiles (if not using match)
+*.certSigningRequest
+*.mobileprovision
+*.p12
+*.cer
+*.certSigningRequest
+*.mobileprovision
+*.p12
+*.cer

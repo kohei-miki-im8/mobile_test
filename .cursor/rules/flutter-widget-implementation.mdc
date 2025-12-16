@@ -1,0 +1,41 @@
+---
+description: Flutterウィジェットの実装に関するルール。ウィジェットは必ずStatelessWidgetまたはStatefulWidgetを継承したクラスとして実装する必要があります。
+globs: ["**/*.dart"]
+alwaysApply: true
+---
+# Flutterウィジェット実装ガイドライン
+
+## ウィジェットの実装方法
+
+- 関数としてウィジェットを返す実装は避け、必ず`StatelessWidget`または`StatefulWidget`を継承したクラスとして実装すること
+- 以下のような実装は避けること：
+
+```dart
+Widget buildMyWidget() {
+  return Container(
+    child: Text('Hello'),
+  );
+}
+```
+
+- 代わりに以下のように実装すること：
+
+```dart
+class MyWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Text('Hello'),
+    );
+  }
+}
+```
+
+## 理由
+
+- ウィジェットをクラスとして実装することで、以下のメリットがある：
+  - コードの再利用性が向上
+  - テストが書きやすくなる
+  - ウィジェットのライフサイクル管理が適切に行える
+  - パフォーマンスの最適化が容易になる
+

@@ -1,0 +1,83 @@
+# Fastfile for iOS
+# このファイルにはfastlaneのLane定義が含まれます
+
+default_platform(:ios)
+
+platform :ios do
+  # ビルド前の準備
+  before_all do
+    # Flutterの依存関係を取得
+    sh("cd ../.. && flutter pub get")
+    
+    # CocoaPodsの依存関係をインストール
+    cocoapods(
+      try_repo_update_on_error: true,
+    )
+  end
+
+  # アプリをビルドするLane（デプロイなし・証明書なしで動作確認用）
+  desc "Build the iOS app (test mode - no code signing)"
+  lane :build_test do
+    # Flutterでビルド（証明書なし）
+    sh("cd ../.. && flutter build ios --release --no-codesign")
+    
+    UI.success("✅ Build completed successfully! (Test mode - no code signing)")
+    UI.important("Note: This is a test build without code signing. For production, use the 'build' lane.")
+  end
+
+  # アプリをビルドするLane（証明書あり・本番用）
+  desc "Build the iOS app with code signing"
+  lane :build do
+    # Flutterでビルド
+    sh("cd ../.. && flutter build ios --release --no-codesign")
+    
+    # Xcodeでアーカイブを作成
+    build_app(
+      workspace: "Runner.xcworkspace",
+      scheme: "Runner",
+      export_method: "app-store",
+      output_directory: "./build",
+      output_name: "Runner.ipa",
+      export_options: {
+        method: "app-store",
+        provisioningProfiles: {
+          "jp.co.ai-mate.lavi" => ENV["PROVISIONING_PROFILE_NAME"] || "match AppStore jp.co.ai-mate.lavi",
+        },
+      },
+      skip_codesigning: false,
+      codesigning_identity: ENV["CODE_SIGNING_IDENTITY"] || "iPhone Distribution",
+    )
+    
+    UI.success("✅ Build completed successfully!")
+  end
+
+  # テストを実行するLane
+  desc "Run tests"
+  lane :test do
+    # Flutterのテストを実行
+    sh("cd ../.. && flutter test")
+    
+    # iOSのテストを実行（オプション）
+    run_tests(
+      workspace: "Runner.xcworkspace",
+      scheme: "Runner",
+      device: "iPhone 15",
+    )
+    
+    UI.success("✅ Tests completed successfully!")
+  end
+
+  # ビルドとテストの両方を実行
+  desc "Build and test"
+  lane :build_and_test do
+    test
+    build
+  end
+
+  # エラー発生時の処理
+  error do |lane, exception|
+    UI.error("❌ Error in lane #{lane}: #{exception.message}")
+    UI.error(exception.backtrace.join("\n"))
+  end
+end
+

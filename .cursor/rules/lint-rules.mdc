@@ -1,0 +1,31 @@
+---
+description: Lintルールに関するガイドライン。analysis_options.yamlの設定に従い、コードスタイルと推奨される実装方法を定義します。
+globs: ["**/*.dart", "**/*.yaml"]
+alwaysApply: true
+---
+# Lint Rules
+
+このプロジェクトでは、以下のlintルールに従ってください：
+
+## 基本ルール
+
+1. `analysis_options.yaml`の設定に従ってください：
+   - `very_good_analysis`パッケージのルールを基本とします
+   - プロパティの変更にはsetterを使用してください
+   - `custom_lint`プラグインを使用します
+
+## コードスタイル
+
+1. パブリックメンバーのドキュメントは必須ではありません（`public_member_api_docs: false`）
+2. pubspec.yamlの依存関係の順序は任意です（`sort_pub_dependencies: false`）
+
+## 推奨される実装方法
+
+1. ウィジェットの実装は[flutter-widget-implementation.mdc](mdc:.cursor/rules/flutter-widget-implementation.mdc)に従ってください
+2. インポートルールは[import-rules.mdc](mdc:.cursor/rules/import-rules.mdc)に従ってください
+3. プロジェクト構造は[project-structure.mdc](mdc:.cursor/rules/project-structure.mdc)に従ってください
+
+## 注意事項
+
+- カスタムlintルールの詳細は`custom_lint.log`で確認できます
+- 新しいlintルールを追加する場合は、`analysis_options.yaml`を更新してください

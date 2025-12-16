@@ -1,0 +1,27 @@
+---
+description: プロジェクト構造に関するルール。重要なディレクトリとファイルの配置について説明します。
+globs: ["**/*"]
+alwaysApply: true
+---
+# プロジェクト構造
+
+## 重要なディレクトリ
+
+- [lib/](mdc:lib) - メインのソースコードディレクトリ
+
+## 重要なファイル
+
+- [main.dart](mdc:lib/main.dart) - アプリケーションのエントリーポイント
+- [README.md](mdc:README.md) - プロジェクトのドキュメント
+
+## 参考ドキュメント
+
+- [Flutter公式ドキュメント](mdc:https:/docs.flutter.dev)
+
+
+
+
+
+
+
+
