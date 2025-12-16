@@ -15,6 +15,7 @@ jobs:
       KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
       KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
       KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+      BUF_TOKEN: ${{ secrets.BUF_TOKEN }}
     
     steps:
       - name: Checkout repository
@@ -49,6 +50,9 @@ jobs:
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
+
+      - name: Setup buf
+        uses: bufbuild/buf-setup-action@v1
 
       - name: Check Ruby
         run: |

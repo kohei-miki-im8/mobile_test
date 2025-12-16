@@ -41,6 +41,7 @@ end
 platform :android do
   # ビルド前の準備
   before_all do
+    sh("cd ../.. && buf generate")
     # Flutterの依存関係を取得
     sh("cd ../.. && flutter pub get")
   end
@@ -108,4 +109,3 @@ platform :android do
     UI.error(exception.backtrace.join("\n"))
   end
 end
-
