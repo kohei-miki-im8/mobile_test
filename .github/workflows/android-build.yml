@@ -15,7 +15,6 @@ jobs:
       KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
       KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
       KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-      RUNNER_TOOL_CACHE: ${{ github.workspace }}/.toolcache
     
     steps:
       - name: Checkout repository
@@ -29,12 +28,24 @@ jobs:
           echo "RUNNER_TOOL_CACHE=$RUNNER_TOOL_CACHE"
           mkdir -p "$RUNNER_TEMP" "$RUNNER_TOOL_CACHE"
 
+      - name: Clear cached Flutter SDK
+        run: |
+          echo "RUNNER_TOOL_CACHE=$RUNNER_TOOL_CACHE"
+          rm -rf "${RUNNER_TOOL_CACHE%/}/flutter" || true
+
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.29.0'
           channel: 'stable'
-          cache: true
+          cache: false
+
+      - name: Verify Flutter
+        run: |
+          which flutter
+          ls -la "$(which flutter)"
+          test -s "$(which flutter)"
+          flutter --version
 
       - name: Check Ruby
         run: |

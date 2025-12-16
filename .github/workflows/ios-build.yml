@@ -22,7 +22,14 @@ jobs:
         with:
           flutter-version: '3.29.0'
           channel: 'stable'
-          cache: true
+          cache: false
+
+      - name: Verify Flutter
+        run: |
+          which flutter
+          ls -la "$(which flutter)"
+          test -s "$(which flutter)"
+          flutter --version
 
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
