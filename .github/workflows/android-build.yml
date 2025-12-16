@@ -9,7 +9,7 @@ on:
 jobs:
   build:
     name: Build Android App
-    runs-on: [self-hosted, linux]
+    runs-on: [self-hosted, Linux]
     
     steps:
       - name: Checkout repository
