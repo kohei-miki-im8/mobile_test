@@ -9,7 +9,7 @@ on:
 jobs:
   build:
     name: Build Android App
-    runs-on: [self-hosted, Linux]
+    runs-on: [self-hosted, linux, android]
     
     steps:
       - name: Checkout repository
@@ -37,43 +37,37 @@ jobs:
 
       - name: Install dependencies
         run: |
-          flutter pub get
-          cd android
-          bundle install
+          make android-setup
 
       - name: Run fastlane build (debug mode)
         run: |
-          cd android
-          bundle exec fastlane build_debug
+          make android-build-debug
         continue-on-error: true
 
       - name: Run fastlane build (test mode - no signing)
         run: |
-          cd android
-          bundle exec fastlane build_test
+          make android-build-test
 
       - name: Run fastlane build (with code signing)
-        if: ${{ secrets.KEYSTORE_FILE != '' && secrets.KEYSTORE_PASSWORD != '' }}
+        if: ${{ secrets.KEYSTORE_FILE != '' && secrets.KEYSTORE_PASSWORD != '' && secrets.KEY_ALIAS != '' && secrets.KEY_PASSWORD != '' }}
         env:
           KEYSTORE_FILE: ${{ secrets.KEYSTORE_FILE }}
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: |
-          cd android
-          bundle exec fastlane build
+          make android-build
         continue-on-error: true
 
       - name: Run fastlane build bundle (for Google Play)
-        if: ${{ secrets.KEYSTORE_FILE != '' && secrets.KEYSTORE_PASSWORD != '' }}
+        if: ${{ secrets.KEYSTORE_FILE != '' && secrets.KEYSTORE_PASSWORD != '' && secrets.KEY_ALIAS != '' && secrets.KEY_PASSWORD != '' }}
         env:
           KEYSTORE_FILE: ${{ secrets.KEYSTORE_FILE }}
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: |
-          cd android
-          bundle exec fastlane build_bundle
+          make android-build-bundle
         continue-on-error: true
 
       - name: Upload build artifacts
@@ -98,4 +92,3 @@ jobs:
           echo "- Debug APK: \`build/app/outputs/flutter-apk/app-debug.apk\`" >> $GITHUB_STEP_SUMMARY
           echo "- Release APK: \`build/app/outputs/flutter-apk/app-release.apk\`" >> $GITHUB_STEP_SUMMARY
           echo "- App Bundle: \`build/app/outputs/bundle/release/app-release.aab\`" >> $GITHUB_STEP_SUMMARY
-

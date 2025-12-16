@@ -1,7 +1,42 @@
 # Fastfile for Android
 # このファイルにはfastlaneのLane定義が含まれます
 
+require "base64"
+require "fileutils"
+
 default_platform(:android)
+
+def ensure_android_release_signing!
+  required = %w[KEYSTORE_FILE KEYSTORE_PASSWORD KEY_ALIAS KEY_PASSWORD]
+  missing = required.select { |key| ENV[key].to_s.strip.empty? }
+  UI.user_error!("Missing signing env vars: #{missing.join(', ')}") unless missing.empty?
+
+  android_dir = File.expand_path("..", __dir__) # .../android/fastlane -> .../android
+  app_dir = File.join(android_dir, "app")
+  FileUtils.mkdir_p(app_dir)
+
+  keystore_out = File.join(app_dir, "upload-keystore.jks")
+  keystore_input = ENV["KEYSTORE_FILE"].to_s.strip
+  if File.exist?(keystore_input)
+    FileUtils.cp(keystore_input, keystore_out)
+  else
+    decoded = Base64.decode64(keystore_input)
+    UI.user_error!("KEYSTORE_FILE must be a file path or base64-encoded keystore") if decoded.bytesize < 1024
+    File.binwrite(keystore_out, decoded)
+  end
+  File.chmod(0o600, keystore_out) rescue nil
+
+  key_properties = File.join(android_dir, "key.properties")
+  File.write(
+    key_properties,
+    <<~PROPS
+      storePassword=#{ENV["KEYSTORE_PASSWORD"]}
+      keyPassword=#{ENV["KEY_PASSWORD"]}
+      keyAlias=#{ENV["KEY_ALIAS"]}
+      storeFile=app/upload-keystore.jks
+    PROPS
+  )
+end
 
 platform :android do
   # ビルド前の準備
@@ -34,8 +69,7 @@ platform :android do
   # アプリをビルドするLane（リリース用・署名あり）
   desc "Build the Android app (release mode - with signing)"
   lane :build do
-    # Flutterでリリースビルド（署名あり）
-    # key.propertiesファイルが必要
+    ensure_android_release_signing!
     sh("cd ../.. && flutter build apk --release")
     
     UI.success("✅ Release build completed successfully!")
@@ -45,7 +79,7 @@ platform :android do
   # App BundleをビルドするLane（Google Play用）
   desc "Build the Android App Bundle (for Google Play)"
   lane :build_bundle do
-    # FlutterでApp Bundleをビルド
+    ensure_android_release_signing!
     sh("cd ../.. && flutter build appbundle --release")
     
     UI.success("✅ App Bundle build completed successfully!")
