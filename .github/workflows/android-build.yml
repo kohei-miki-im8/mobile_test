@@ -34,18 +34,15 @@ jobs:
           channel: 'stable'
           cache: true
 
-      - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '3.2'
-          bundler-cache: true
+      - name: Check Ruby
+        run: |
+          ruby -v
+          bundle -v
 
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-          cache: 'gradle'
+      - name: Check Java
+        run: |
+          java -version
+          javac -version
 
       - name: Install dependencies
         run: |
