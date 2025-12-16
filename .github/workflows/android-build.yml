@@ -15,7 +15,7 @@ jobs:
       KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
       KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
       KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-      RUNNER_TOOL_CACHE: ${{ runner.temp }}/toolcache
+      RUNNER_TOOL_CACHE: ${{ github.workspace }}/.toolcache
     
     steps:
       - name: Checkout repository
