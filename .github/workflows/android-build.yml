@@ -90,6 +90,12 @@ jobs:
           chmod +x scripts/generate_firebase_options_for_ci.sh
           ./scripts/generate_firebase_options_for_ci.sh
 
+      - name: Generate google-services.json for CI builds
+        run: |
+          # Generate dummy google-services.json for CI builds
+          chmod +x scripts/generate_google_services_for_ci.sh
+          ./scripts/generate_google_services_for_ci.sh
+
       - name: Run fastlane build (debug mode)
         run: |
           make android-build-debug
