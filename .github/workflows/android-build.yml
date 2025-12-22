@@ -16,6 +16,7 @@ jobs:
       KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
       KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
       BUF_TOKEN: ${{ secrets.BUF_TOKEN }}
+      SKIP_BUF_GENERATE: "true"  # protoスタブは既に生成済み
     
     steps:
       - name: Checkout repository

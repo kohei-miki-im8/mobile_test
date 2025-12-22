@@ -41,7 +41,15 @@ end
 platform :android do
   # ビルド前の準備
   before_all do
-    sh("cd ../.. && buf generate")
+    # protoスタブの生成（CI環境ではスキップ可能）
+    unless ENV["SKIP_BUF_GENERATE"] == "true"
+      # bufコマンドが利用可能かつBSRにアクセス可能な場合のみ実行
+      result = sh("cd ../.. && buf generate", error_callback: ->(error) {
+        UI.important("⚠️ buf generate failed, using existing proto stubs: #{error}")
+      }) rescue nil
+    else
+      UI.message("⏭️ Skipping buf generate (SKIP_BUF_GENERATE=true)")
+    end
     # Flutterの依存関係を取得
     sh("cd ../.. && flutter pub get")
   end
