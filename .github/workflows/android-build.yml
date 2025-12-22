@@ -85,7 +85,9 @@ jobs:
 
       - name: Generate env.g.dart with build_runner
         run: |
-          # Remove existing env.g.dart to avoid conflicts
+          # Clear build_runner cache to avoid conflicts with committed generated files
+          rm -rf .dart_tool/build
+          # Remove existing env.g.dart to regenerate with CI dummy values
           rm -f lib/presentations/env.g.dart
           # Generate only env.g.dart
           dart run build_runner build --build-filter="lib/presentations/env.g.dart"
