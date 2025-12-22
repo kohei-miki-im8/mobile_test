@@ -4,12 +4,18 @@ on:
   push:
     branches:
       - main
-  workflow_dispatch: # 手動実行も可能
+  workflow_dispatch:
+    inputs:
+      skip_cache:
+        description: 'キャッシュを無効化してビルド (true/false)'
+        required: false
+        default: 'false'
+        type: boolean
 
 env:
-  # キャッシュバージョン: キャッシュを無効化したい場合はこの値を変更してください
-  # 例: v1 → v2
-  CACHE_VERSION: v1
+  # キャッシュを無効化する場合、ランダムなサフィックスを追加
+  # 手動実行時に skip_cache=true を指定するとキャッシュを使用しない
+  CACHE_KEY_SUFFIX: ${{ github.event.inputs.skip_cache == 'true' && github.run_id || 'v1' }}
 
 jobs:
   build:
@@ -42,7 +48,7 @@ jobs:
           flutter-version: '3.32.0'
           channel: 'stable'
           cache: true  # Flutter SDKをキャッシュ
-          cache-key: ${{ env.CACHE_VERSION }}-flutter-${{ runner.os }}-3.32.0
+          cache-key: flutter-${{ runner.os }}-3.32.0-${{ env.CACHE_KEY_SUFFIX }}
 
       - name: Verify Flutter
         run: |
@@ -56,9 +62,10 @@ jobs:
           path: |
             ~/.pub-cache
             .dart_tool
-          key: ${{ env.CACHE_VERSION }}-pub-cache-${{ runner.os }}-${{ hashFiles('pubspec.lock') }}
+          key: pub-cache-${{ runner.os }}-${{ hashFiles('pubspec.lock') }}-${{ env.CACHE_KEY_SUFFIX }}
           restore-keys: |
-            ${{ env.CACHE_VERSION }}-pub-cache-${{ runner.os }}-
+            pub-cache-${{ runner.os }}-${{ hashFiles('pubspec.lock') }}-v1
+            pub-cache-${{ runner.os }}-
 
       # Gradle のキャッシュ
       - name: Cache Gradle
@@ -68,18 +75,20 @@ jobs:
             ~/.gradle/caches
             ~/.gradle/wrapper
             android/.gradle
-          key: ${{ env.CACHE_VERSION }}-gradle-${{ runner.os }}-${{ hashFiles('android/build.gradle', 'android/app/build.gradle', 'android/gradle/wrapper/gradle-wrapper.properties') }}
+          key: gradle-${{ runner.os }}-${{ hashFiles('android/build.gradle', 'android/app/build.gradle', 'android/gradle/wrapper/gradle-wrapper.properties') }}-${{ env.CACHE_KEY_SUFFIX }}
           restore-keys: |
-            ${{ env.CACHE_VERSION }}-gradle-${{ runner.os }}-
+            gradle-${{ runner.os }}-${{ hashFiles('android/build.gradle', 'android/app/build.gradle', 'android/gradle/wrapper/gradle-wrapper.properties') }}-v1
+            gradle-${{ runner.os }}-
 
       # Ruby Bundler のキャッシュ
       - name: Cache Ruby Bundler
         uses: actions/cache@v4
         with:
           path: vendor/bundle
-          key: ${{ env.CACHE_VERSION }}-bundler-${{ runner.os }}-${{ hashFiles('Gemfile.lock') }}
+          key: bundler-${{ runner.os }}-${{ hashFiles('Gemfile.lock') }}-${{ env.CACHE_KEY_SUFFIX }}
           restore-keys: |
-            ${{ env.CACHE_VERSION }}-bundler-${{ runner.os }}-
+            bundler-${{ runner.os }}-${{ hashFiles('Gemfile.lock') }}-v1
+            bundler-${{ runner.os }}-
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
