@@ -85,7 +85,8 @@ jobs:
 
       - name: Generate env.g.dart with build_runner
         run: |
-          dart run build_runner build --delete-conflicting-outputs --build-filter="lib/presentations/env.g.dart"
+          # Only generate env.g.dart, do not delete other generated files
+          dart run build_runner build --build-filter="lib/presentations/env.g.dart"
 
       - name: Run fastlane build (debug mode)
         run: |
