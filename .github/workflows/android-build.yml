@@ -84,6 +84,12 @@ jobs:
           ./scripts/generate_env_g_dart_for_ci.sh
           head -20 lib/presentations/env.g.dart
 
+      - name: Generate firebase_options.dart for CI builds
+        run: |
+          # Generate dummy firebase_options.dart for CI builds
+          chmod +x scripts/generate_firebase_options_for_ci.sh
+          ./scripts/generate_firebase_options_for_ci.sh
+
       - name: Run fastlane build (debug mode)
         run: |
           make android-build-debug
