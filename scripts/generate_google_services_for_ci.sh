@@ -16,7 +16,7 @@ cat > "$GOOGLE_SERVICES_JSON" << 'EOF'
       "client_info": {
         "mobilesdk_app_id": "1:000000000000:android:0000000000000000",
         "android_client_info": {
-          "package_name": "jp.co.ai_mate.lavi"
+          "package_name": "com.aimate.econa_mobile_app"
         }
       },
       "oauth_client": [],
