@@ -1,0 +1,59 @@
+//
+//  Generated code. Do not modify.
+//  source: econa/enums/service_code.proto
+//
+// @dart = 2.12
+
+// ignore_for_file: annotate_overrides, camel_case_types, comment_references
+// ignore_for_file: constant_identifier_names, library_prefixes
+// ignore_for_file: non_constant_identifier_names, prefer_final_fields
+// ignore_for_file: unnecessary_import, unnecessary_this, unused_import
+
+import 'dart:convert' as $convert;
+import 'dart:core' as $core;
+import 'dart:typed_data' as $typed_data;
+
+@$core.Deprecated('Use serviceCodeDescriptor instead')
+const ServiceCode$json = {
+  '1': 'ServiceCode',
+  '2': [
+    {'1': 'SERVICE_CODE_UNSPECIFIED', '2': 0},
+    {'1': 'SERVICE_CODE_LIKE', '2': 1},
+    {'1': 'SERVICE_CODE_MATCHING_CONSUME', '2': 100},
+    {'1': 'SERVICE_CODE_MP_SUPER_LIKE', '2': 101},
+    {'1': 'SERVICE_CODE_MP_BOOST', '2': 102},
+    {'1': 'SERVICE_CODE_MP_READ_CHECK', '2': 103},
+    {'1': 'SERVICE_CODE_MP_APPEAL', '2': 104},
+    {'1': 'SERVICE_CODE_MP_PRIVATE_MODE_1_MONTH', '2': 105},
+    {'1': 'SERVICE_CODE_MP_PRIVATE_MODE_3_MONTH', '2': 106},
+    {'1': 'SERVICE_CODE_MP_PRIVATE_MODE_6_MONTH', '2': 107},
+    {'1': 'SERVICE_CODE_LP_QUESTION', '2': 201},
+    {'1': 'SERVICE_CODE_LP_QUESTION_VIEW', '2': 202},
+    {'1': 'SERVICE_CODE_LP_COUNSELOR', '2': 203},
+    {'1': 'SERVICE_CODE_LP_CHAT_SIMULATOR', '2': 204},
+    {'1': 'SERVICE_CODE_LP_SUPER_RECOMMEND', '2': 205},
+    {'1': 'SERVICE_CODE_LP_CHAT_TOPIC', '2': 206},
+    {'1': 'SERVICE_CODE_LP_PERSONA_GREETING', '2': 207},
+    {'1': 'SERVICE_CODE_LP_PERSONA_REPLY', '2': 208},
+    {'1': 'SERVICE_CODE_REGISTRATION_BONUS_PROFILE_PHOTO', '2': 301},
+    {'1': 'SERVICE_CODE_REGISTRATION_BONUS_PROFILE_INTRODUCTORY', '2': 302},
+  ],
+};
+
+/// Descriptor for `ServiceCode`. Decode as a `google.protobuf.EnumDescriptorProto`.
+final $typed_data.Uint8List serviceCodeDescriptor = $convert.base64Decode(
+    'CgtTZXJ2aWNlQ29kZRIcChhTRVJWSUNFX0NPREVfVU5TUEVDSUZJRUQQABIVChFTRVJWSUNFX0'
+    'NPREVfTElLRRABEiEKHVNFUlZJQ0VfQ09ERV9NQVRDSElOR19DT05TVU1FEGQSHgoaU0VSVklD'
+    'RV9DT0RFX01QX1NVUEVSX0xJS0UQZRIZChVTRVJWSUNFX0NPREVfTVBfQk9PU1QQZhIeChpTRV'
+    'JWSUNFX0NPREVfTVBfUkVBRF9DSEVDSxBnEhoKFlNFUlZJQ0VfQ09ERV9NUF9BUFBFQUwQaBIo'
+    'CiRTRVJWSUNFX0NPREVfTVBfUFJJVkFURV9NT0RFXzFfTU9OVEgQaRIoCiRTRVJWSUNFX0NPRE'
+    'VfTVBfUFJJVkFURV9NT0RFXzNfTU9OVEgQahIoCiRTRVJWSUNFX0NPREVfTVBfUFJJVkFURV9N'
+    'T0RFXzZfTU9OVEgQaxIdChhTRVJWSUNFX0NPREVfTFBfUVVFU1RJT04QyQESIgodU0VSVklDRV'
+    '9DT0RFX0xQX1FVRVNUSU9OX1ZJRVcQygESHgoZU0VSVklDRV9DT0RFX0xQX0NPVU5TRUxPUhDL'
+    'ARIjCh5TRVJWSUNFX0NPREVfTFBfQ0hBVF9TSU1VTEFUT1IQzAESJAofU0VSVklDRV9DT0RFX0'
+    'xQX1NVUEVSX1JFQ09NTUVORBDNARIfChpTRVJWSUNFX0NPREVfTFBfQ0hBVF9UT1BJQxDOARIl'
+    'CiBTRVJWSUNFX0NPREVfTFBfUEVSU09OQV9HUkVFVElORxDPARIiCh1TRVJWSUNFX0NPREVfTF'
+    'BfUEVSU09OQV9SRVBMWRDQARIyCi1TRVJWSUNFX0NPREVfUkVHSVNUUkFUSU9OX0JPTlVTX1BS'
+    'T0ZJTEVfUEhPVE8QrQISOQo0U0VSVklDRV9DT0RFX1JFR0lTVFJBVElPTl9CT05VU19QUk9GSU'
+    'xFX0lOVFJPRFVDVE9SWRCuAg==');
+

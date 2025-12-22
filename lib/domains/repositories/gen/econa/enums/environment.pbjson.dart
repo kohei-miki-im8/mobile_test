@@ -1,0 +1,32 @@
+//
+//  Generated code. Do not modify.
+//  source: econa/enums/environment.proto
+//
+// @dart = 2.12
+
+// ignore_for_file: annotate_overrides, camel_case_types, comment_references
+// ignore_for_file: constant_identifier_names, library_prefixes
+// ignore_for_file: non_constant_identifier_names, prefer_final_fields
+// ignore_for_file: unnecessary_import, unnecessary_this, unused_import
+
+import 'dart:convert' as $convert;
+import 'dart:core' as $core;
+import 'dart:typed_data' as $typed_data;
+
+@$core.Deprecated('Use environmentDescriptor instead')
+const Environment$json = {
+  '1': 'Environment',
+  '2': [
+    {'1': 'ENVIRONMENT_UNSPECIFIED', '2': 0},
+    {'1': 'ENVIRONMENT_PRODUCTION', '2': 1},
+    {'1': 'ENVIRONMENT_STAGING', '2': 2},
+    {'1': 'ENVIRONMENT_DEVELOPMENT', '2': 3},
+  ],
+};
+
+/// Descriptor for `Environment`. Decode as a `google.protobuf.EnumDescriptorProto`.
+final $typed_data.Uint8List environmentDescriptor = $convert.base64Decode(
+    'CgtFbnZpcm9ubWVudBIbChdFTlZJUk9OTUVOVF9VTlNQRUNJRklFRBAAEhoKFkVOVklST05NRU'
+    '5UX1BST0RVQ1RJT04QARIXChNFTlZJUk9OTUVOVF9TVEFHSU5HEAISGwoXRU5WSVJPTk1FTlRf'
+    'REVWRUxPUE1FTlQQAw==');
+
