@@ -30,24 +30,50 @@ jobs:
           echo "RUNNER_TOOL_CACHE=$RUNNER_TOOL_CACHE"
           mkdir -p "$RUNNER_TEMP" "$RUNNER_TOOL_CACHE"
 
-      - name: Clear cached Flutter SDK
-        run: |
-          echo "RUNNER_TOOL_CACHE=$RUNNER_TOOL_CACHE"
-          rm -rf "${RUNNER_TOOL_CACHE%/}/flutter" || true
-
+      # Flutter SDK のキャッシュを有効化
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.32.0'
           channel: 'stable'
-          cache: false
+          cache: true  # Flutter SDKをキャッシュ
 
       - name: Verify Flutter
         run: |
           which flutter
-          ls -la "$(which flutter)"
-          test -s "$(which flutter)"
           flutter --version
+
+      # Pub packages のキャッシュ
+      - name: Cache Pub packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pub-cache
+            .dart_tool
+          key: pub-cache-${{ runner.os }}-${{ hashFiles('pubspec.lock') }}
+          restore-keys: |
+            pub-cache-${{ runner.os }}-
+
+      # Gradle のキャッシュ
+      - name: Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+            android/.gradle
+          key: gradle-${{ runner.os }}-${{ hashFiles('android/build.gradle', 'android/app/build.gradle', 'android/gradle/wrapper/gradle-wrapper.properties') }}
+          restore-keys: |
+            gradle-${{ runner.os }}-
+
+      # Ruby Bundler のキャッシュ
+      - name: Cache Ruby Bundler
+        uses: actions/cache@v4
+        with:
+          path: vendor/bundle
+          key: bundler-${{ runner.os }}-${{ hashFiles('Gemfile.lock') }}
+          restore-keys: |
+            bundler-${{ runner.os }}-
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
@@ -65,16 +91,26 @@ jobs:
           java -version
           javac -version
 
+      # Android SDK packages のキャッシュ（self-hostedランナーでは既にインストール済みの場合スキップ）
       - name: Install Android SDK packages
         run: |
-          sdkmanager --install \
-            "platform-tools" \
-            "platforms;android-36" \
-            "build-tools;36.0.0"
+          # Check if packages are already installed
+          if ! sdkmanager --list_installed | grep -q "platforms;android-36"; then
+            echo "Installing Android SDK packages..."
+            sdkmanager --install \
+              "platform-tools" \
+              "platforms;android-36" \
+              "build-tools;36.0.0"
+          else
+            echo "Android SDK packages already installed, skipping..."
+          fi
 
       - name: Install dependencies
         run: |
-          make android-setup
+          # Flutter pub get with cache
+          flutter pub get
+          # Bundle install with deployment mode for faster installs
+          cd android/fastlane && bundle config set --local path '../../vendor/bundle' && bundle install --jobs 4 --retry 3
 
       - name: Generate env.g.dart for CI builds
         run: |
