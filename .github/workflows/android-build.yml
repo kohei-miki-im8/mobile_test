@@ -76,21 +76,13 @@ jobs:
         run: |
           make android-setup
 
-      - name: Create .env file for build
+      - name: Generate env.g.dart for CI builds
         run: |
-          # Generate .env file with all required environment variables
-          chmod +x scripts/generate_env_for_ci.sh
-          ./scripts/generate_env_for_ci.sh .env
-          cat .env
-
-      - name: Generate env.g.dart with build_runner
-        run: |
-          # Clear build_runner cache to avoid conflicts with committed generated files
-          rm -rf .dart_tool/build
-          # Remove existing env.g.dart to regenerate with CI dummy values
-          rm -f lib/presentations/env.g.dart
-          # Generate only env.g.dart
-          dart run build_runner build --build-filter="lib/presentations/env.g.dart"
+          # Generate env.g.dart directly without using build_runner
+          # This avoids conflicts with other generated files
+          chmod +x scripts/generate_env_g_dart_for_ci.sh
+          ./scripts/generate_env_g_dart_for_ci.sh
+          head -20 lib/presentations/env.g.dart
 
       - name: Run fastlane build (debug mode)
         run: |
