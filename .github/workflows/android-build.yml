@@ -120,6 +120,16 @@ jobs:
             echo "Android SDK packages already installed, skipping..."
           fi
 
+      # Gradleキャッシュをクリア（キャッシュ無効化時またはエラー時）
+      - name: Clean Gradle cache
+        if: ${{ github.event.inputs.skip_cache == 'true' }}
+        run: |
+          echo "Cleaning Gradle cache..."
+          rm -rf ~/.gradle/caches/8.9/transforms
+          rm -rf ~/.gradle/caches/journal-1
+          rm -rf android/.gradle
+          echo "Gradle cache cleaned"
+
       - name: Install dependencies
         run: |
           # Flutter pub get with cache
