@@ -45,10 +45,10 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.32.0'
+          flutter-version: '3.27.0'
           channel: 'stable'
           cache: true  # Flutter SDKをキャッシュ
-          cache-key: flutter-${{ runner.os }}-3.32.0-${{ env.CACHE_KEY_SUFFIX }}
+          cache-key: flutter-${{ runner.os }}-3.27.0-${{ env.CACHE_KEY_SUFFIX }}
 
       - name: Verify Flutter
         run: |
