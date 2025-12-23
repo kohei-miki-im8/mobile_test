@@ -21,6 +21,7 @@ jobs:
   build:
     name: Build Android App
     runs-on: [self-hosted, linux, android]
+    timeout-minutes: 60
     env:
       KEYSTORE_FILE: ${{ secrets.KEYSTORE_FILE }}
       KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
@@ -44,6 +45,7 @@ jobs:
       # Flutter SDK のキャッシュを有効化
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
+        timeout-minutes: 5
         with:
           flutter-version: '3.38.5'
           channel: 'stable'
@@ -158,6 +160,7 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
           cache: 'gradle'
+        timeout-minutes: 5
 
       - name: Check Ruby
         run: |
